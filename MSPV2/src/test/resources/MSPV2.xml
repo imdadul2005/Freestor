@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="MSPV2" parallel="tests">
+
+    <parameter name="url" value="http://192.168.13.65"></parameter>
+    <parameter name="username" value="superadmin"></parameter>
+    <parameter name="domain" value=""></parameter>
+    <parameter name="password" value="freestor"></parameter>
+    <parameter name="browser" value="chrome"></parameter>
+
+    <test name = "Freestor TestSuit">
+        <classes>
+            <!--<class name="searchitems.SearchItemsWithDatabaseDataSource"/>-->
+            <class name="StartUp.Login"></class>
+            <!--<class name="Login"></class>-->
+        </classes>
+    </test>
+</suite>

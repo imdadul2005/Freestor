@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite guice-stage="DEVELOPMENT" verbose="0" name="Failed suite [MSPV2]" parallel="tests">
+  <parameter name="password" value="freestor"/>
+  <parameter name="domain" value=""/>
+  <parameter name="browser" value="firefox"/>
+  <parameter name="url" value="http://192.168.13.65"/>
+  <parameter name="username" value="superadmin"/>
+  <test name="Freestor TestSuit">
+    <classes>
+      <class name="StartUp.Login"/>
+    </classes>
+  </test> <!-- Freestor TestSuit -->
+  <test name="Freestor TestSuit(failed)" parallel="tests">
+    <classes>
+      <class name="StartUp.Login">
+        <methods>
+          <include name="start"/>
+          <include name="end"/>
+          <include name="wrongDomain"/>
+          <include name="setup"/>
+        </methods>
+      </class> <!-- StartUp.Login -->
+    </classes>
+  </test> <!-- Freestor TestSuit(failed) -->
+</suite> <!-- Failed suite [MSPV2] -->

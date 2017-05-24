@@ -54,39 +54,31 @@ public class Login extends Common {
             e.printStackTrace();
         }
     }
-   /* @BeforeMethod
-    public void start(){
-        driver = localMachine(browser);
-        driver.navigate().to(url);
-    }*/
 
-    @AfterMethod
-    public void testEnd(){
-        driver.close();
-    }
-    @Test //(dependsOnMethods = {"incorrectLogin3"})
+    @Test (enabled =  true)//(dependsOnMethods = {"incorrectLogin3"})
     public void inCorrectLogin() {
         login(u1,d1,p1);
+        existsElement(By.xpath(errorMessage));
         WebElement message = driver.findElement(By.xpath(errorMessage));
         Assert.assertEquals(message.getText(),"Login failed. The username or password is incorrect.");
         System.out.println(getCurrentPageUrl());
     }
-    @Test
+    @Test (enabled =true)
     public void correctLogin() {
         login(u2,d2,p2);
-        // Click the corner icon
+        existsElement(By.xpath(navRight));
         WebElement icon = driver.findElement(By.xpath(navRight));
         icon.click();
         waitUntilClickAble(By.xpath(navRight));
-        // Check the name of the user and compare
-        String loginUserName = driver.findElement(By.xpath(navRightUserName)).getText();
+        String loginUserName = driver.findElement(By.xpath(navRightUserName)).getText(); // Check the name of the user and compare
         System.out.println(loginUserName);
         Assert.assertEquals(loginUserName,u2);
         System.out.println(getCurrentPageUrl());
     }
-    @Test
+    @Test (enabled =true)
     public void wrongDomain() {
         login(u3,d3,p3);
+        existsElement(By.xpath(errorMessage));
         WebElement message = driver.findElement(By.xpath(errorMessage));
         Assert.assertEquals(message.getText(),"Login failed. The customer domain does not exist.");
         System.out.println(getCurrentPageUrl());

@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: TestSuite
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 26.719 sec <<< FAILURE! - in TestSuite
+wrongDomain(StartUp.Login)  Time elapsed: 1.809 sec  <<< FAILURE!
+java.lang.AssertionError: expected [Login failed. The customer domain does not exist.] but found []
+	at StartUp.Login.wrongDomain(Login.java:83)
+

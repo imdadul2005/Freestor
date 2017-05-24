@@ -7,7 +7,7 @@
     <parameter name="username" value="superadmin"></parameter>
     <parameter name="domain" value=""></parameter>
     <parameter name="password" value="freestor"></parameter>
-    <parameter name="browser" value="chrome"></parameter>
+    <parameter name="browser" value="firefox"></parameter>
 
     <test name = "Freestor TestSuit">
         <classes>
@@ -16,4 +16,5 @@
             <!--<class name="Login"></class>-->
         </classes>
     </test>
+
 </suite>

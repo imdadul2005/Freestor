@@ -9,6 +9,9 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
 
@@ -19,6 +22,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static java.lang.System.exit;
+
 /**
  * Created by Administrator on 5/22/2017.
  */
@@ -31,6 +37,13 @@ public class Common {
         driver.navigate().to(url);
     }
 
+
+    @AfterMethod
+    public void end (ITestResult result){
+        if (ITestResult.FAILURE==result.getStatus())
+            captureScreenshot("TEST-");
+        driver.quit();
+    }
     public WebDriver localMachine(String browserName) {
         if (browserName.equalsIgnoreCase("chrome")) {
             System.setProperty("webdriver.chrome.driver", "../Generic/driver/chromedriver.exe");
@@ -174,9 +187,10 @@ public class Common {
     public void getLinks(String locator){
         driver.findElement(By.linkText(locator)).findElement(By.tagName("a")).getText();
     }
-    public static void captureScreenshot(WebDriver driver, String screenshotName){
+    public static void captureScreenshot(String screenshotName){
 
-        DateFormat df = new SimpleDateFormat("(MM.dd.yyyy-HH:mma)");
+    //yyMMddHHmmssZ         MM.dd.yyyy-HH:mma
+        DateFormat df = new SimpleDateFormat("(yyMMddHHmmssZ)");
         Date date = new Date();
         df.format(date);
 
@@ -185,6 +199,7 @@ public class Common {
             FileUtils.copyFile(file, new File(System.getProperty("user.dir")+ "/screenshots/"+screenshotName+" "+df.format(date)+".png"));
             System.out.println("Screenshot captured");
         } catch (Exception e) {
+            System.getProperty("user.dir");
             System.out.println("Exception while taking screenshot "+e.getMessage());;
         }
 
@@ -234,7 +249,8 @@ public class Common {
         findElementAndSend(By.xpath("//input[@name='username']"), username);
         findElementAndSend(By.xpath("//input[@name='domain']"), domain);
         findElementAndSend(By.xpath("//input[@name='password']"), password);
-        driver.findElement(By.xpath("//button[@name='login']")).click();
+        driver.findElement(By.xpath("//input[@name='password']")).sendKeys(Keys.ENTER);
+
     }
     public static void findElementAndSend(By locator,  String information) {
         driver.findElement(locator).sendKeys(information);
@@ -258,7 +274,20 @@ public class Common {
             wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(locator)));
     }
 
-
+    public void existsElement( By locator) {
+        boolean status = false;
+        try {
+            driver.findElement(locator);
+        } catch (NoSuchElementException e) {
+            status = false;
+        }
+        status = true;
+        try{
+            Assert.assertEquals(status,true);
+        }catch (AssertionError e){
+            exit(1);
+        }
+    }
 }
 
 

@@ -9,11 +9,25 @@
     <parameter name="password" value="freestor"></parameter>
     <parameter name="browser" value="firefox"></parameter>
 
+    <!--Below section is for IOC configuration, it should be used with configuration.iocluster-->
+
+    <parameter name="primaryServer" value="R710-30433"></parameter>
+    <parameter name="partnerServer" value="R710-31208"></parameter>
+    <parameter name="clustername" value=""></parameter>
+    <parameter name="clusterIP" value=""></parameter>
+    <parameter name="qurom1" value=""></parameter>
+    <parameter name="qurom2" value=""></parameter>
+    <parameter name="ipmiUsername" value=""></parameter>
+    <parameter name="ipmiPassword" value=""></parameter>
+
+
+
     <test name = "Freestor TestSuit">
         <classes>
             <!--<class name="searchitems.SearchItemsWithDatabaseDataSource"/>-->
-            <class name="StartUp.Login"></class>
-            <!--<class name="Login"></class>-->
+         <!--  <class name="StartUp.Login"></class> -->
+           <!-- <class name="Configurations.iocluster"></class> -->
+            <class name="Manange.CreateClient"></class>
         </classes>
     </test>
 

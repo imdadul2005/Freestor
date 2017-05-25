@@ -3,7 +3,7 @@
 <suite guice-stage="DEVELOPMENT" verbose="0" name="Failed suite [MSPV2]" parallel="tests">
   <parameter name="password" value="freestor"/>
   <parameter name="domain" value=""/>
-  <parameter name="browser" value="firefox"/>
+  <parameter name="browser" value="chrome"/>
   <parameter name="url" value="http://192.168.13.65"/>
   <parameter name="username" value="superadmin"/>
   <test name="Freestor TestSuit">

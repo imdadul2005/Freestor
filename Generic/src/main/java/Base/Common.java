@@ -29,6 +29,9 @@ import static java.lang.System.exit;
  * Created by Administrator on 5/22/2017.
  */
 public class Common {
+
+    String searchLocation = ".form-control.ng-valid.ng-dirty.ng-valid-parse.ng-touched";
+            //"//input[@placeholder='Search for...']";
     public static WebDriver driver = null;
     @Parameters ({"url","browser"})
     @BeforeMethod
@@ -36,7 +39,6 @@ public class Common {
         driver = localMachine(browser);
         driver.navigate().to(url);
     }
-
 
     @AfterMethod
     public void end (ITestResult result){
@@ -214,8 +216,8 @@ public class Common {
         WebDriverWait wait = new WebDriverWait(driver, 10);
         WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
     }
-    public void waitUntilVisible(By locator){
-        WebDriverWait wait = new WebDriverWait(driver, 10);
+    public void waitUntilVisible(int sec, By locator){
+        WebDriverWait wait = new WebDriverWait(driver, sec);
         WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
     public void waitUntilSelectable(By locator){
@@ -245,17 +247,17 @@ public class Common {
         // pull out the text inside the parens
         return string.substring(leftIndex + 1, rightIndex);
     }
-    public static void login(String username, String domain, String password) {
+    public void login(String username, String domain, String password) {
         findElementAndSend(By.xpath("//input[@name='username']"), username);
         findElementAndSend(By.xpath("//input[@name='domain']"), domain);
         findElementAndSend(By.xpath("//input[@name='password']"), password);
         driver.findElement(By.xpath("//input[@name='password']")).sendKeys(Keys.ENTER);
 
     }
-    public static void findElementAndSend(By locator,  String information) {
+    public void findElementAndSend(By locator,  String information) {
         driver.findElement(locator).sendKeys(information);
     }
-    public static void findFromList(List<WebElement> list, String searchItem) {
+    public  void findFromListAndSelect(List<WebElement> list, String searchItem) {
         System.out.println("findFromList()--Requested item : " + searchItem);
         for (WebElement item : list) {
             System.out.println("Listed item " + item.getText());
@@ -266,14 +268,17 @@ public class Common {
             }
         }
     }
-    public static void waitUntilDisappear(int sec, String type, String locator) {
-        WebDriverWait wait = new WebDriverWait(driver, sec);
-        if (type.equalsIgnoreCase("xpath"))
-            wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(locator)));
-        if (type.equalsIgnoreCase("css"))
-            wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(locator)));
+    public  void findFromListAndSelect(By LocatorList, By selectedLocation, String stringToSend) {
+        waitUntilVisible(20, selectedLocation);
+        driver.findElement(selectedLocation).click();
+        List<WebElement> navList = driver.findElements(LocatorList);
+        findFromListAndSelect(navList, stringToSend);
     }
 
+    public static void waitUntilDisappear(int sec, By locator) {
+        WebDriverWait wait = new WebDriverWait(driver, sec);
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
+    }
     public void existsElement( By locator) {
         boolean status = false;
         try {
@@ -288,6 +293,65 @@ public class Common {
             exit(1);
         }
     }
+
+    public  void selectServer(String serverIP) {
+        waitUntilVisible(50, By.cssSelector(searchLocation));
+        findElementAndSend(By.cssSelector(searchLocation), serverIP);
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        driver.findElement(By.cssSelector("ul.array-list>li")).click();
+     //   driver.findElement(By.xpath("html/body/div[1]/div/div[1]/div[2]/ul/li")).click();
+    }
+
+    public void waitUntilVisibleAndSend(By locator, String sendme) {
+        waitUntilVisible(200,locator);
+        WebElement element = driver.findElement(locator);
+        element.sendKeys(sendme);
+        element.sendKeys(Keys.ENTER);
+    }
+
+    public WebElement findFromListAndSendLocation(List<WebElement> list, String searchItem) {
+        WebElement notFound= null;
+        System.out.println("findFromList()--Requested item : " + searchItem);
+        for (WebElement item : list) {
+            System.out.println("Listed item " + item.getText());
+            if (item.getText().equalsIgnoreCase(searchItem)) {
+                System.out.println("findFromList() --Found item : " + item.getText());
+                return item;
+            }
+        }
+        return notFound;
+    }
+
+    public void labelCheck(By locator,String label, By sendLocation, String sendItem,int waitTime,By checkItem,Boolean send,boolean isMultiple,String innertext){
+        List<WebElement> list =  driver.findElements(locator);
+        for (WebElement a:list) {
+            System.out.println("item :------" +a.getText()+ "----");
+            if(a.getText().equalsIgnoreCase(label)) {
+               // System.out.println("Found");
+                waitUntilDisappear(20,checkItem);
+                if (!isMultiple){
+                    if (send)
+                        a.findElement(sendLocation).sendKeys(sendItem);
+                    else
+                        a.findElement(sendLocation).click();
+                    break;
+                }
+                if(isMultiple){
+                    List<WebElement> temp = a.findElements(sendLocation);
+                    for (WebElement item:temp) {
+                        if(item.getText().equalsIgnoreCase(innertext))
+                            item.click();
+                    }
+                }
+            }
+        }
+    }
 }
+
+
 
 
